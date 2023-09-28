@@ -75,6 +75,7 @@ menuEndPoints name _ (walletNro, _) protocolPABParams fundPABParams' _ _  = do
     MonadIOClass.liftIO $ P.putStrLn "--------------------------------"
     return option
 
+
 --------------------------------------------------------------------------------2
 
 pabMainLoop :: PABContracts.PABParamsInFundMenu
