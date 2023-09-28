@@ -1,0 +1,215 @@
+cabal-version: 2.4
+name:          mayz-protocol
+version:       0.1.0.3
+author:        Manuel Padilla
+maintainer:    manuelpad@gmail.com
+build-type:    Simple
+copyright:     © 2022 Manuel Padilla
+license:       Apache-2.0
+license-files: LICENSE
+
+flag defer-plugin-errors
+  description:
+    Defer errors from the plugin, useful for things like Haddock that can't handle it.
+
+  default:     True
+  manual:      True
+
+common common-all
+  default-language:   Haskell2010
+  ghc-options:
+    -fobject-code -fno-ignore-interface-pragmas
+    -fno-omit-interface-pragmas -fno-strictness -fno-spec-constr
+    -fno-specialise -fexpose-all-unfoldings
+    -Wnoncanonical-monad-instances -Wall -Wincomplete-uni-patterns
+    -Wincomplete-record-updates -Wredundant-constraints -Widentities
+    -Wunused-matches -Wunused-binds -Wno-unused-imports
+  if flag(defer-plugin-errors)
+    ghc-options: -fplugin-opt PlutusTx.Plugin:defer-errors
+
+  -- cuando quiero hacer profiling de los scripts... pero no anda ya como antes
+  -- {-# OPTIONS_GHC -fplugin-opt PlutusTx.Plugin:profile-all #-}
+  -- {-# OPTIONS_GHC -g -fplugin-opt PlutusTx.Plugin:coverage-all #-}
+  default-extensions:
+    NoImplicitPrelude
+    BangPatterns
+    NumericUnderscores
+    OverloadedStrings
+
+  -- Strict
+  -- DeriveFoldable
+  -- DeriveFunctor
+  -- DeriveGeneric
+  -- DeriveLift
+  -- DeriveTraversable
+  -- ExplicitForAll
+  -- GeneralizedNewtypeDeriving
+  -- ImportQualifiedPost
+  -- ScopedTypeVariables
+  -- StandaloneDeriving
+
+  -- , base               ^>=4.14.1.0
+  build-depends:
+    , aeson
+    , base               ^>=4.14.1.0
+    , base16-bytestring
+    , bech32
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , freer-extras
+    , freer-simple
+    , hex-text
+    , lens
+    , MissingH
+    , old-locale
+    , openapi3
+    , prettyprinter
+    , regex
+    , serialise
+    , split
+    , stm
+    , text
+    , time
+    , utf8-string
+    , base64-bytestring
+    , plutus-simple-model
+    , QuickCheck
+    , tasty
+    , tasty-quickcheck
+    , plutus-ledger-api
+    , plutus-tx
+    , plutus-ledger
+    , flat
+    , random
+
+common common-deps-test-suites
+  build-depends:
+      , base               ^>=4.14.1.0
+      , mayz-protocol
+      , plutus-simple-model
+      , QuickCheck
+      , tasty
+      , tasty-quickcheck
+      , plutus-ledger
+      , plutus-ledger-api
+      , plutus-tx
+      , plutus-script-utils
+      , plutus-ledger-constraints
+      , plutus-ledger-api
+      , plutus-tx-plugin
+      , plutus-core
+
+library
+  import:          common-all
+  hs-source-dirs:  src
+  exposed-modules:
+    Generic.CLIHelpers
+    Generic.Constants
+    Generic.DeployHelpers
+    Generic.EmulatorHelpers
+    Generic.OffChainEval
+    Generic.OffChainEvalTesting
+    Generic.OffChainHelpers
+    Generic.OnChainHelpers
+    Generic.PABHelpers
+    Generic.Types
+    Protocol.Constants
+    Protocol.Delegation.OffChain
+    Protocol.Delegation.OnChain
+    Protocol.Delegation.PABSimulator
+    Protocol.Delegation.Types
+    Protocol.Deploy
+    Protocol.Fund.Helpers
+    Protocol.Fund.Holding.OnChain
+    Protocol.Fund.Holding.Types
+    Protocol.Fund.OffChain
+    Protocol.Fund.OnChain
+    Protocol.Fund.PABSimulator
+    Protocol.Fund.PABSimulatorCommissions
+    Protocol.Fund.PABSimulatorUser
+    Protocol.Fund.Types
+    Protocol.InvestUnit.OnChain
+    Protocol.InvestUnit.Types
+    Protocol.OffChainHelpers
+    Protocol.OnChainHelpers
+    Protocol.Others.OffChain
+    Protocol.Others.PABSimulator
+    Protocol.Others.PolicyFT
+    Protocol.Others.PolicyNFT
+    Protocol.PABContracts
+    Protocol.PABHelpers
+    Protocol.PABSimulator
+    Protocol.PABTypes
+    Protocol.Protocol.Helpers
+    Protocol.Protocol.OffChain
+    Protocol.Protocol.OnChain
+    Protocol.Protocol.PABSimulator
+    Protocol.Protocol.Types
+    Protocol.Script.OffChain
+    Protocol.Script.OnChain
+    Protocol.Script.PABSimulator
+    Protocol.Script.Types
+    Protocol.SellOffer.OffChain
+    Protocol.SellOffer.OnChain
+    Protocol.SellOffer.PABSimulator
+    Protocol.SellOffer.Types
+    Protocol.BuyOrder.OffChain
+    Protocol.BuyOrder.OnChain
+    Protocol.BuyOrder.PABSimulator
+    Protocol.BuyOrder.Types
+    Protocol.Types
+
+  --------------------
+  -- Local components
+  --------------------
+  build-depends:
+    , cardano-addresses
+    , cardano-api
+    , cardano-binary
+    , cardano-crypto-class
+    , cardano-ledger-alonzo
+    , cardano-ledger-babbage
+    , cardano-ledger-core
+    , cardano-ledger-shelley
+    , cardano-node-emulator
+    , cardano-wallet-core
+    , data-default
+    , playground-common
+    , plutonomy
+    , plutus-chain-index-core
+    , plutus-contract
+    , plutus-core
+    , plutus-ledger
+    , plutus-ledger-api
+    , plutus-ledger-constraints
+    , plutus-pab
+    , plutus-script-utils
+    , plutus-tx
+    , plutus-tx-constraints
+    , plutus-tx-plugin
+
+test-suite unitTest-validator-example
+  import:         common-all, common-deps-test-suites
+  type:           exitcode-stdio-1.0
+  main-is:        unitTest-validator-example.hs
+  hs-source-dirs: tests
+   
+test-suite  propertyTest-functions-useMem
+  import:         common-all, common-deps-test-suites
+  type:           exitcode-stdio-1.0
+  main-is:        propertyTest-functions-useMem.hs
+  hs-source-dirs: tests
+
+test-suite  propertyTest-SellOffers
+  import:         common-all, common-deps-test-suites
+  type:           exitcode-stdio-1.0
+  main-is:        propertyTest-SellOffers.hs
+  hs-source-dirs: tests
+
+executable cli
+  import:         common-all
+  main-is:        cli.hs
+  hs-source-dirs: app
+  build-depends:  mayz-protocol

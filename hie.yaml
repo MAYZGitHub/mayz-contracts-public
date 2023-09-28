@@ -1,0 +1,32 @@
+cradle:
+  multi:
+    - path: "/home/manuelpadilla/sources/reposUbuntu/MAYZ/mayz-contracts-public-v1.0.1/src"
+      config:
+        cradle:
+          cabal:
+            component: "lib:mayz-protocol"
+    - path: "/home/manuelpadilla/sources/reposUbuntu/MAYZ/mayz-contracts-public-v1.0.1/app"
+      config:
+        cradle:
+          cabal:
+            component: "mayz-protocol:exe:cli"
+    - path: "/home/manuelpadilla/sources/reposUbuntu/MAYZ/mayz-contracts-public-v1.0.1/tests"
+      config:
+        cradle:
+          cabal:
+            component: "mayz-protocol:test-suite:unitTest-validator-example"
+    - path: "/home/manuelpadilla/sources/reposUbuntu/MAYZ/mayz-contracts-public-v1.0.1/tests"
+      config:
+        cradle:
+          cabal:
+            component: "mayz-protocol:test-suite:propertyTest-functions-useMem"
+    - path: "/home/manuelpadilla/sources/reposUbuntu/MAYZ/mayz-contracts-public-v1.0.1/tests"
+      config:
+        cradle:
+          cabal:
+            component: "mayz-protocol:test-suite:propertyTest-SellOffers"
+    - path: "/home/manuelpadilla/sources/reposUbuntu/MAYZ/mayz-contracts-public-v1.0.1/_OLD"
+      config:
+        cradle:
+          none:
+    
