@@ -8,6 +8,7 @@ copyright:     © 2022 Manuel Padilla
 license:       Apache-2.0
 license-files: LICENSE
 
+
 flag defer-plugin-errors
   description:
     Defer errors from the plugin, useful for things like Haddock that can't handle it.
